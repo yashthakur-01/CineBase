@@ -74,8 +74,8 @@ A full-stack movie discovery platform with AI-powered recommendations, built wit
 
 ### 1️⃣ Clone the Repository
 ```bash
-git clone https://github.com/yashthakur-01/ymdb.git
-cd ymdb
+git clone https://github.com/yashthakur-01/CineBase.git
+cd CineBase
 ```
 
 ### 2️⃣ Setup Server
@@ -98,8 +98,8 @@ npm run dev
 
 ### 4️⃣ Start ChromaDB
 ```bash
-# Using Docker
-docker run -p 8000:8000 chromadb/chroma
+# Using Docker with persistent storage
+docker run -p 8000:8000 -v ./chroma_db:/data chromadb/chroma
 ```
 
 ---
