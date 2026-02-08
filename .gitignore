@@ -1,0 +1,6 @@
+# Vector database storage
+chroma_db/
+
+# OS files
+.DS_Store
+Thumbs.db
