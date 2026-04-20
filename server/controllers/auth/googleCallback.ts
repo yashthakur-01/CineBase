@@ -29,10 +29,10 @@ const googleCallback = async (req: Request, res: Response) => {
         });
 
         // Redirect to frontend home page
-        return res.redirect(`${process.env.CLIENT_ORIGIN}/Home`);
+        return res.redirect(`${process.env.CLIENT_ORIGIN}/home`);
     } catch (error) {
         console.error("Google callback error:", error);
-        return res.redirect(`${process.env.CLIENT_ORIGIN}/Auth`);
+        return res.redirect(`${process.env.CLIENT_ORIGIN}/auth`);
 
     }
 };
