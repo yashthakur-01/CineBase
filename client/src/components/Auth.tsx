@@ -8,7 +8,6 @@ import { API_BASE } from "../config/api";
 axios.defaults.withCredentials = true;
 
 export const Auth = () => {
-
   const [isLogin, setIsLogin] = useState(true);
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
@@ -148,19 +147,21 @@ export const Auth = () => {
               <div className="flex gap-2 mb-6 bg-slate-700/50 p-1 rounded-lg">
                 <button
                   onClick={() => setIsLogin(true)}
-                  className={`flex-1 py-1.5 px-3 rounded-md font-semibold text-sm transition-all duration-300 ${isLogin
+                  className={`flex-1 py-1.5 px-3 rounded-md font-semibold text-sm transition-all duration-300 ${
+                    isLogin
                       ? "bg-purple-600 text-white shadow-lg"
                       : "text-slate-300 hover:text-white"
-                    }`}
+                  }`}
                 >
                   Login
                 </button>
                 <button
                   onClick={() => setIsLogin(false)}
-                  className={`flex-1 py-2 px-4 rounded-md font-semibold transition-all duration-300 ${!isLogin
+                  className={`flex-1 py-2 px-4 rounded-md font-semibold transition-all duration-300 ${
+                    !isLogin
                       ? "bg-purple-600 text-white shadow-lg"
                       : "text-slate-300 hover:text-white"
-                    }`}
+                  }`}
                 >
                   Sign Up
                 </button>

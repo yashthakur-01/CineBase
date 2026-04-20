@@ -72,7 +72,7 @@ function Home() {
       if (error instanceof AxiosError) {
         toast.error(
           error.response?.data?.message ||
-          "Unexpected error occurred fetching movies",
+            "Unexpected error occurred fetching movies",
         );
       }
     } finally {
@@ -95,7 +95,7 @@ function Home() {
       if (error instanceof AxiosError) {
         toast.error(
           error.response?.data?.message ||
-          "Unexpected error occurred fetching movies",
+            "Unexpected error occurred fetching movies",
         );
         console.log(error);
       }
@@ -155,51 +155,56 @@ function Home() {
   };
 
   // Debounced search function
-  const fetchSearchResults = useCallback(async (query: string, skip = 0, append = false) => {
-    if (!query.trim()) {
-      setSearchResults([]);
-      setShowSearchResults(false);
-      setSearchHasMore(true);
-      setSearchLoading(false);
-      setSearchLoadingMore(false);
-      return;
-    }
-
-    try {
-      if (append) {
-        setSearchLoadingMore(true);
-      } else {
-        setSearchLoading(true);
+  const fetchSearchResults = useCallback(
+    async (query: string, skip = 0, append = false) => {
+      if (!query.trim()) {
+        setSearchResults([]);
+        setShowSearchResults(false);
+        setSearchHasMore(true);
+        setSearchLoading(false);
+        setSearchLoadingMore(false);
+        return;
       }
-      const res = await axios.get(
-        `${API_BASE}/public/search-movies?search=${encodeURIComponent(query)}&skip=${skip}&limit=${SEARCH_LIMIT}`
-      );
-      if (res.data.success && res.data.data) {
-        const newResults = res.data.data as Movie[];
-        setSearchResults((prev) => (append ? [...prev, ...newResults] : newResults));
-        setShowSearchResults(true);
-        setSearchHasMore(newResults.length === SEARCH_LIMIT);
-      } else {
+
+      try {
+        if (append) {
+          setSearchLoadingMore(true);
+        } else {
+          setSearchLoading(true);
+        }
+        const res = await axios.get(
+          `${API_BASE}/public/search-movies?search=${encodeURIComponent(query)}&skip=${skip}&limit=${SEARCH_LIMIT}`,
+        );
+        if (res.data.success && res.data.data) {
+          const newResults = res.data.data as Movie[];
+          setSearchResults((prev) =>
+            append ? [...prev, ...newResults] : newResults,
+          );
+          setShowSearchResults(true);
+          setSearchHasMore(newResults.length === SEARCH_LIMIT);
+        } else {
+          if (!append) {
+            setSearchResults([]);
+            setShowSearchResults(true);
+          }
+          setSearchHasMore(false);
+        }
+      } catch (error) {
+        if (error instanceof AxiosError) {
+          console.error(error.response?.data?.message || "Search failed");
+        }
         if (!append) {
           setSearchResults([]);
           setShowSearchResults(true);
         }
         setSearchHasMore(false);
+      } finally {
+        setSearchLoading(false);
+        setSearchLoadingMore(false);
       }
-    } catch (error) {
-      if (error instanceof AxiosError) {
-        console.error(error.response?.data?.message || "Search failed");
-      }
-      if (!append) {
-        setSearchResults([]);
-        setShowSearchResults(true);
-      }
-      setSearchHasMore(false);
-    } finally {
-      setSearchLoading(false);
-      setSearchLoadingMore(false);
-    }
-  }, []);
+    },
+    [],
+  );
 
   // Handle search input change with debounce
   const handleSearchInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -243,7 +248,8 @@ function Home() {
 
   const handleSearchResultsScroll = (e: React.UIEvent<HTMLDivElement>) => {
     const target = e.currentTarget;
-    const isAtBottom = target.scrollTop + target.clientHeight >= target.scrollHeight - 10;
+    const isAtBottom =
+      target.scrollTop + target.clientHeight >= target.scrollHeight - 10;
 
     if (
       isAtBottom &&
@@ -313,7 +319,11 @@ function Home() {
                   type="submit"
                   className="absolute right-3 top-1/2 transform -translate-y-1/2 text-slate-400 hover:text-purple-500 transition-colors"
                 >
-                  {searchLoading ? <Loader2 size={18} className="animate-spin" /> : <Search size={18} />}
+                  {searchLoading ? (
+                    <Loader2 size={18} className="animate-spin" />
+                  ) : (
+                    <Search size={18} />
+                  )}
                 </button>
 
                 {/* Search Results Dropdown */}
@@ -324,7 +334,8 @@ function Home() {
                   >
                     <div className="flex items-center justify-between px-4 py-2 border-b border-slate-700">
                       <span className="text-sm text-slate-400">
-                        {searchResults.length} result{searchResults.length !== 1 ? 's' : ''} found
+                        {searchResults.length} result
+                        {searchResults.length !== 1 ? "s" : ""} found
                       </span>
                       <button
                         type="button"
@@ -340,7 +351,9 @@ function Home() {
                           key={movie._id}
                           className="flex items-center gap-3 px-4 py-3 hover:bg-slate-700/50 cursor-pointer transition-colors border-b border-slate-700/50 last:border-b-0"
                           onClick={() => {
-                            navigate(`/movie/${movie.tmdb_id}`, { state: { movie } });
+                            navigate(`/movie/${movie.tmdb_id}`, {
+                              state: { movie },
+                            });
                             closeSearchResults();
                           }}
                         >
@@ -350,12 +363,19 @@ function Home() {
                             className="w-12 h-16 object-cover rounded"
                           />
                           <div className="flex-1 min-w-0">
-                            <h4 className="text-white font-medium truncate">{movie.original_title}</h4>
+                            <h4 className="text-white font-medium truncate">
+                              {movie.original_title}
+                            </h4>
                             <div className="flex items-center gap-2 mt-1">
                               {movie.vote_average && (
                                 <div className="flex items-center gap-1">
-                                  <Star size={12} className="text-yellow-400 fill-yellow-400" />
-                                  <span className="text-xs text-yellow-400">{movie.vote_average.toFixed(1)}</span>
+                                  <Star
+                                    size={12}
+                                    className="text-yellow-400 fill-yellow-400"
+                                  />
+                                  <span className="text-xs text-yellow-400">
+                                    {movie.vote_average.toFixed(1)}
+                                  </span>
                                 </div>
                               )}
                               {movie.release_date && (
@@ -446,7 +466,11 @@ function Home() {
                 aria-label="Search movies"
                 className="absolute right-3 top-1/2 transform -translate-y-1/2 text-slate-400 hover:text-purple-500"
               >
-                {searchLoading ? <Loader2 size={18} className="animate-spin" /> : <Search size={18} />}
+                {searchLoading ? (
+                  <Loader2 size={18} className="animate-spin" />
+                ) : (
+                  <Search size={18} />
+                )}
               </button>
 
               {/* Mobile Search Results Dropdown */}
@@ -454,7 +478,8 @@ function Home() {
                 <div className="absolute top-full left-0 right-0 mt-2 bg-slate-800/95 backdrop-blur-xl border border-white/20 rounded-xl shadow-2xl z-50 max-h-80 overflow-y-auto">
                   <div className="flex items-center justify-between px-4 py-2 border-b border-slate-700">
                     <span className="text-sm text-slate-400">
-                      {searchResults.length} result{searchResults.length !== 1 ? 's' : ''} found
+                      {searchResults.length} result
+                      {searchResults.length !== 1 ? "s" : ""} found
                     </span>
                     <button
                       type="button"
@@ -470,7 +495,9 @@ function Home() {
                         key={movie._id}
                         className="flex items-center gap-3 px-4 py-3 hover:bg-slate-700/50 cursor-pointer transition-colors border-b border-slate-700/50 last:border-b-0"
                         onClick={() => {
-                          navigate(`/movie/${movie.tmdb_id}`, { state: { movie } });
+                          navigate(`/movie/${movie.tmdb_id}`, {
+                            state: { movie },
+                          });
                           closeSearchResults();
                         }}
                       >
@@ -480,12 +507,19 @@ function Home() {
                           className="w-10 h-14 object-cover rounded"
                         />
                         <div className="flex-1 min-w-0">
-                          <h4 className="text-white font-medium text-sm truncate">{movie.original_title}</h4>
+                          <h4 className="text-white font-medium text-sm truncate">
+                            {movie.original_title}
+                          </h4>
                           <div className="flex items-center gap-2 mt-1">
                             {movie.vote_average && (
                               <div className="flex items-center gap-1">
-                                <Star size={10} className="text-yellow-400 fill-yellow-400" />
-                                <span className="text-xs text-yellow-400">{movie.vote_average.toFixed(1)}</span>
+                                <Star
+                                  size={10}
+                                  className="text-yellow-400 fill-yellow-400"
+                                />
+                                <span className="text-xs text-yellow-400">
+                                  {movie.vote_average.toFixed(1)}
+                                </span>
                               </div>
                             )}
                             {movie.release_date && (
@@ -570,10 +604,18 @@ function Home() {
               {/* Action Buttons */}
               <div className="flex gap-2 sm:gap-4 flex-wrap">
                 <button
-                  onClick={() => navigate(`/movie/${currentMovie.tmdb_id}`, { state: { movie: currentMovie } })}
+                  onClick={() =>
+                    navigate(`/movie/${currentMovie.tmdb_id}`, {
+                      state: { movie: currentMovie },
+                    })
+                  }
                   className="flex items-center gap-1 sm:gap-2 px-4 sm:px-6 py-2 sm:py-3 bg-linear-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white rounded-lg font-semibold text-sm sm:text-base transition-all hover:shadow-lg hover:shadow-purple-600/50"
                 >
-                  <Play size={18} fill="currentColor" className="sm:w-5 sm:h-5" />
+                  <Play
+                    size={18}
+                    fill="currentColor"
+                    className="sm:w-5 sm:h-5"
+                  />
                   <span>Watch Now</span>
                 </button>
                 {isAuthenticated && (
@@ -609,10 +651,11 @@ function Home() {
                 key={index}
                 onClick={() => setCarouselIndex(index)}
                 aria-label={`Go to slide ${index + 1}`}
-                className={`w-2 h-2 rounded-full transition-all ${index === carouselIndex
-                  ? "bg-purple-500 w-6"
-                  : "bg-white/50 hover:bg-white"
-                  }`}
+                className={`w-2 h-2 rounded-full transition-all ${
+                  index === carouselIndex
+                    ? "bg-purple-500 w-6"
+                    : "bg-white/50 hover:bg-white"
+                }`}
               />
             ))}
           </div>
@@ -641,7 +684,9 @@ function Home() {
                 <div
                   key={movie._id}
                   className="group cursor-pointer transition-transform duration-300 hover:scale-105"
-                  onClick={() => navigate(`/movie/${movie.tmdb_id}`, { state: { movie } })}
+                  onClick={() =>
+                    navigate(`/movie/${movie.tmdb_id}`, { state: { movie } })
+                  }
                 >
                   {/* Movie Card */}
                   <div className="relative overflow-hidden rounded-lg shadow-lg bg-slate-700/50 border border-slate-600/50">
