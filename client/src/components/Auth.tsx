@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { Mail, Lock, User, Eye, EyeOff, Loader2 } from "lucide-react";
 import toast from "react-hot-toast";
-import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
 const API_BASE = "http://localhost:3000/api";
@@ -10,7 +9,6 @@ const API_BASE = "http://localhost:3000/api";
 axios.defaults.withCredentials = true;
 
 export const Auth = () => {
-  const navigate = useNavigate();
 
   const [isLogin, setIsLogin] = useState(true);
   const [showPassword, setShowPassword] = useState(false);
