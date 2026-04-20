@@ -2,8 +2,7 @@ import { useState } from "react";
 import { Mail, Lock, User, Eye, EyeOff, Loader2 } from "lucide-react";
 import toast from "react-hot-toast";
 import axios from "axios";
-
-const API_BASE = "http://localhost:3000/api";
+import { API_BASE } from "../config/api";
 
 // Configure axios defaults
 axios.defaults.withCredentials = true;

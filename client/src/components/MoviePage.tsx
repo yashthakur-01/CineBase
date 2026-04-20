@@ -16,8 +16,8 @@ import {
     TrendingUp,
     Sparkles,
 } from "lucide-react";
+import { API_BASE } from "../config/api";
 
-const API_BASE = "http://localhost:3000/api";
 const TMDB_IMAGE_BASE = "https://image.tmdb.org/t/p";
 
 interface Movie {

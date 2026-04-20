@@ -6,8 +6,8 @@ import {
   type ReactNode,
 } from "react";
 import axios from "axios";
+import { API_BASE } from "../config/api";
 
-const API_BASE = "http://localhost:3000/api";
 axios.defaults.withCredentials = true;
 
 interface User {
