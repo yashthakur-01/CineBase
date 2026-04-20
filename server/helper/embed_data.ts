@@ -1,5 +1,5 @@
 import { Document } from "@langchain/core/documents";
-import vectorStore from "../lib/vectorStore.js";
+import { addDocumentsToVectorStore } from "../lib/vectorStore.js";
 import { Types } from "mongoose";
 import { MoviesModel } from "../models/movieModel.js";
 
@@ -16,7 +16,7 @@ const embedData = async (docs: Document[]) => {
             console.log("embedding movies from ", i, " to ", Math.min(i + 50, docs.length));
 
             const batchDocs = docs.slice(i, i + 50);
-            await vectorStore.addDocuments(batchDocs);
+            await addDocumentsToVectorStore(batchDocs);
 
             const save_ids = batchDocs.map((doc) => doc?.metadata?.mongo_id).filter(Boolean).map(id => new Types.ObjectId(id));
             if (save_ids.length > 0) {

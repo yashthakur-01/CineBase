@@ -13,7 +13,7 @@ A full-stack movie discovery platform with AI-powered recommendations, built wit
 - **Video Playback** - Watch movie trailers directly in the app
 
 ### 🤖 AI-Powered Recommendations
-- **Vector Search** - Uses ChromaDB for semantic movie similarity
+- **Vector Search** - Uses Pinecone for semantic movie similarity
 - **Smart Suggestions** - Get personalized recommendations based on movie content and metadata
 - **LangChain Integration** - Leverages Cohere embeddings for intelligent matching
 
@@ -53,7 +53,7 @@ A full-stack movie discovery platform with AI-powered recommendations, built wit
 - **JWT** - Token-based auth
 
 ### AI & Vector Search
-- **ChromaDB** - Vector database for embeddings
+- **Pinecone** - Managed vector database for embeddings
 - **LangChain** - AI framework
 - **Cohere** - Text embeddings
 
@@ -67,7 +67,7 @@ A full-stack movie discovery platform with AI-powered recommendations, built wit
 ### Prerequisites
 - Node.js 18+
 - MongoDB Atlas account or local MongoDB
-- ChromaDB instance running locally
+- Pinecone account with an index configured for Cohere embeddings
 - TMDB API key
 - Cohere API key
 - Google OAuth credentials (optional)
@@ -96,10 +96,10 @@ npm install
 npm run dev
 ```
 
-### 4️⃣ Start ChromaDB
+### 4️⃣ Configure Pinecone
 ```bash
-# Using Docker with persistent storage
-docker run -p 8000:8000 -v ./chroma_db:/data chromadb/chroma
+# Create a dense index with metric=cosine and dimension=1536
+# Set PINECONE_API_KEY, PINECONE_INDEX_NAME, and optionally PINECONE_INDEX_HOST in server/.env
 ```
 
 ---
@@ -124,13 +124,13 @@ docker run -p 8000:8000 -v ./chroma_db:/data chromadb/chroma
 │   │   ├── moviesPublicPage/  # Movie API
 │   │   └── watchlist/      # Watchlist CRUD
 │   ├── lib/                # Utilities
-│   │   ├── vectorStore.ts  # ChromaDB setup
+│   │   ├── vectorStore.ts  # Pinecone setup
 │   │   └── dbConnect.ts    # MongoDB connection
 │   ├── models/             # Mongoose schemas
 │   ├── routes/             # API routes
 │   └── app.ts              # Express app
 │
-└── chroma_db/              # Vector database storage
+└── chroma_db/              # Legacy local vector DB data, no longer used by the app
 ```
 
 ---

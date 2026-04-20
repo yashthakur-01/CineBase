@@ -1,6 +1,6 @@
 import { Auth } from "./components/Auth";
 import { Toaster } from "react-hot-toast";
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, Navigate } from "react-router-dom";
 import { AuthProvider } from "./context/AuthContext";
 import Home from "./components/Home";
 import MoviePage from "./components/MoviePage";
@@ -55,6 +55,8 @@ function App() {
         }}
       />
       <Routes>
+        <Route path="/" element={<Navigate to="/home" replace />} />
+
         <Route
           path="auth"
           element={
@@ -64,7 +66,7 @@ function App() {
           }
         />
 
-        <Route path="Home" element={<Home></Home>} />
+        <Route path="home" element={<Home></Home>} />
         <Route path="movie/:tmdb_id" element={<MoviePage />} />
         <Route path="watchlist" element={<WatchList />} />
         {/* Example protected route - wrap any route that needs authentication */}

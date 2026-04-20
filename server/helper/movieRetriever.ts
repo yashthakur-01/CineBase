@@ -1,15 +1,17 @@
 import {Document} from "@langchain/core/documents";
-import vectorStore from "../lib/vectorStore.js"
+import { querySimilarDocuments } from "../lib/vectorStore.js";
 import { Types } from "mongoose";
 
 const movieRetriever = async(document: Document,k: number=13)=>{
 
-    const retriever = vectorStore.asRetriever({k:k+1});
-
-    const recommendations = await retriever.invoke(document.pageContent);
+    const recommendations = await querySimilarDocuments(document, k + 1);
 
     const current_id = document.metadata?.mongo_id?.toString();
-    const recommended_ids = recommendations.map(doc=>doc.metadata.mongo_id).filter(Boolean).filter(id=>id!==current_id).map(id=>new Types.ObjectId(id));
+    const recommended_ids = recommendations
+        .map((match) => match.metadata?.mongo_id || match.id)
+        .filter(Boolean)
+        .filter((id) => id !== current_id)
+        .map((id) => new Types.ObjectId(id));
 
     return recommended_ids;
 }
