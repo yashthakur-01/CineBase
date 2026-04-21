@@ -4,9 +4,6 @@ import toast from "react-hot-toast";
 import axios from "axios";
 import { API_BASE } from "../config/api";
 
-// Configure axios defaults
-axios.defaults.withCredentials = true;
-
 export const Auth = () => {
   const [isLogin, setIsLogin] = useState(true);
   const [showPassword, setShowPassword] = useState(false);

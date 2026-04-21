@@ -8,8 +8,6 @@ import {
 import axios from "axios";
 import { API_BASE } from "../config/api";
 
-axios.defaults.withCredentials = true;
-
 interface User {
   id: string;
   name: string;

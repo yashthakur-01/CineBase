@@ -1,3 +1,5 @@
+import axios from "axios";
+
 const backendUrl = import.meta.env.VITE_BACKEND_URL?.trim();
 
 if (import.meta.env.PROD && !backendUrl) {
@@ -7,3 +9,5 @@ if (import.meta.env.PROD && !backendUrl) {
 }
 
 export const API_BASE = backendUrl || "http://localhost:3000/api";
+
+axios.defaults.withCredentials = true;
