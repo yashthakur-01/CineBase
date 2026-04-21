@@ -71,7 +71,7 @@ export const redirectIfAuthenticated = async (
     if (token) {
       const decoded = verifyToken(token);
       if (decoded) {
-        return res.redirect(`${process.env.CLIENT_URL}/home`);
+        return res.redirect(`${process.env.CLIENT_ORIGIN}/home`);
         };
       }
     
