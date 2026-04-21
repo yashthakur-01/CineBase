@@ -30,8 +30,26 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   const checkAuth = async () => {
     try {
-      const { data } = await axios.get(`${API_BASE}/auth/me`);
-      if (data.success && data.authenticated) {
+      let data: any = null;
+
+      // Retry once for OAuth redirect flow where cookie propagation can lag.
+      for (let attempt = 0; attempt < 2; attempt++) {
+        try {
+          const response = await axios.get(`${API_BASE}/auth/me`, {
+            withCredentials: true,
+          });
+          data = response.data;
+          break;
+        } catch (error: any) {
+          const status = error?.response?.status;
+          if (attempt === 1 || status !== 401) {
+            throw error;
+          }
+          await new Promise((resolve) => setTimeout(resolve, 300));
+        }
+      }
+
+      if (data?.success && data?.authenticated) {
         setUser(data.user);
         localStorage.setItem("user", JSON.stringify(data.user));
       } else {
@@ -48,7 +66,11 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   const logout = async () => {
     try {
-      await axios.post(`${API_BASE}/auth/logout`);
+      await axios.post(
+        `${API_BASE}/auth/logout`,
+        {},
+        { withCredentials: true }
+      );
     } catch (error) {
       console.error("Logout error:", error);
     } finally {

@@ -1,6 +1,5 @@
 import { Request, Response } from "express";
 import { generateToken } from "../../lib/jwt.js";
-import { authenticate } from "passport";
 
 const googleCallback = async (req: Request, res: Response) => {
     try {
@@ -12,6 +11,7 @@ const googleCallback = async (req: Request, res: Response) => {
         }
 
         const user = req.user as any;
+        const clientOrigin = process.env.CLIENT_ORIGIN || "http://localhost:5173";
 
         // Generate JWT token
         const token = generateToken({
@@ -28,11 +28,28 @@ const googleCallback = async (req: Request, res: Response) => {
             maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
         });
 
-        // Redirect to frontend home page
-        return res.redirect(`${process.env.CLIENT_ORIGIN}/home`);
+        const redirectTo = `${clientOrigin}/home`;
+
+        // Some browsers can drop Set-Cookie on cross-site redirect chains.
+        // Return a tiny HTML page that navigates after the cookie is written.
+        res.setHeader("Cache-Control", "no-store");
+        return res.status(200).send(`<!doctype html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <meta http-equiv="refresh" content="0;url=${redirectTo}" />
+        <title>Redirecting...</title>
+    </head>
+    <body>
+        <script>
+            window.location.replace(${JSON.stringify(redirectTo)});
+        </script>
+    </body>
+</html>`);
     } catch (error) {
         console.error("Google callback error:", error);
-        return res.redirect(`${process.env.CLIENT_ORIGIN}/auth`);
+        const clientOrigin = process.env.CLIENT_ORIGIN || "http://localhost:5173";
+        return res.redirect(`${clientOrigin}/auth`);
 
     }
 };
