@@ -106,7 +106,7 @@ export const Auth = () => {
   };
 
   const handleGoogleLogin = async () => {
-      await axios.get(`${API_BASE}/auth/me`);
+      await axios.get(`${API_BASE}/auth/google`);
   };
 
   return (
