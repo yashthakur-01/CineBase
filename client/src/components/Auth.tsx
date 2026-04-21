@@ -106,7 +106,7 @@ export const Auth = () => {
   };
 
   const handleGoogleLogin = async () => {
-    window.location.href = `${API_BASE}/auth/google`;
+      await axios.post(`${API_BASE}/auth/me`);
   };
 
   return (
