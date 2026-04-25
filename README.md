@@ -2,6 +2,8 @@
 
 A full-stack movie discovery platform with AI-powered recommendations, built with React, Node.js, and vector search technology.
 
+LINK - https://cine-base-eight.vercel.app
+
 ---
 
 ## ✨ Features
