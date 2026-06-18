@@ -23,6 +23,7 @@ router.get(
     redirectIfAuthenticated,
     passport.authenticate("google", {
         scope: ["profile", "email"],
+        prompt: "select_account",
     })
 );
 
