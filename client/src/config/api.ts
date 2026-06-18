@@ -2,12 +2,9 @@ import axios from "axios";
 
 const backendUrl = import.meta.env.VITE_BACKEND_URL?.trim();
 
-if (import.meta.env.PROD && !backendUrl) {
-    throw new Error(
-        "Missing VITE_BACKEND_URL. Set it in your frontend environment variables before deploying."
-    );
-}
-
-export const API_BASE = backendUrl || "http://localhost:3000/api";
+// In production, defaults to "/api" which goes through Vercel's proxy rewrite.
+// Locally, .env sets this to "http://localhost:3000/api".
+export const API_BASE = backendUrl || "/api";
 
 axios.defaults.withCredentials = true;
+
